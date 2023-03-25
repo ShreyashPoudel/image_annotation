@@ -1,5 +1,27 @@
 from tkinter import *
 from PIL import Image,ImageTk
+import json
+
+
+def onclicked():
+    has_potholes=pot.get()
+    user_rating=rating.get()
+    print(f"potholes={has_potholes} rating={user_rating}")
+
+    data={"images":{
+        "image_name":"baki cha",
+        "has_potholes":has_potholes,
+        "rating":user_rating,
+        "is_pitched":"yo ni baki"
+    },
+    }
+
+    json_file = json.dumps(data,indent=6)  
+    
+    with open("images.json","w") as outfile:
+        outfile.write(json_file)
+
+
 
 #main window
 root=Tk()
@@ -16,7 +38,7 @@ data_image=ImageTk.PhotoImage(data_image_reduced)
 forward_button=Button(root,text="NEXT")
 back_button=Button(root,text="PREVIOUS")
 image=Button(image=data_image)
-save=Button(root,text="SAVE",width=30)
+save=Button(root,text="SAVE",width=30,command=onclicked)
 
 
 #potholes radio
