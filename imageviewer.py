@@ -15,7 +15,7 @@ def onclicked_saved():
     has_potholes=pot.get()
     user_rating=rating.get()
     is_pitched=pitched.get()
-   # print(f"potholes={has_potholes} rating={user_rating}")
+
 
     global data
     data[image_list[number]]={}
@@ -26,7 +26,8 @@ def onclicked_saved():
     if (number<len(image_list)-1):
         onclicked_forward()
     else :
-        print ("sakyoo")
+        print("sakyoo")
+        
 
 
 
@@ -69,7 +70,7 @@ for i_images in os.listdir(image_directory):
 
 #main window
 root=Tk()
-root.geometry("630x400")
+root.geometry("630x450")
 root.resizable(0,0)
 
 
