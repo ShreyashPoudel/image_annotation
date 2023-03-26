@@ -14,13 +14,14 @@ def onclicked_saved():
         save['state']=DISABLED
     has_potholes=pot.get()
     user_rating=rating.get()
-    print(f"potholes={has_potholes} rating={user_rating}")
+    is_pitched=pitched.get()
+   # print(f"potholes={has_potholes} rating={user_rating}")
 
     global data
     data[image_list[number]]={}
     data[image_list[number]]['has_potholes']=has_potholes
     data[image_list[number]]['rating']=user_rating
-    data[image_list[number]]['is_pitched']="baki"
+    data[image_list[number]]['is_pitched']=is_pitched
 
     if (number<len(image_list)-1):
         onclicked_forward()
@@ -78,16 +79,16 @@ display_image(0)
 #forward,next,image,save
 forward_button=Button(root,text="NEXT",command=lambda:onclicked_forward())
 
-back_button=Button(root,text="PREVIOUS")
+exit_button=Button(root,text="EXIT",command=root.quit)
 
 save=Button(root,text="SAVE",width=30,command=onclicked_saved)
 
 
 #potholes radio
 pot=IntVar()
-potholes_label=Label(root,text="Has Pothoes")
-yes_potholes=Radiobutton(root,variable=pot,value=1,text="yes")
-no_potholes=Radiobutton(root,variable=pot,value=0,text="no")
+potholes_label=Label(root,text="Has Potholes ?")
+yes_potholes=Radiobutton(root,variable=pot,value=1,text="Yes")
+no_potholes=Radiobutton(root,variable=pot,value=0,text="No")
 
 #rating
 rating=IntVar()
@@ -95,6 +96,14 @@ rating_label=Label(root,text="Rating")
 r_excellent=Radiobutton(root,variable=rating,value=3,text="Excellent")
 r_moderate=Radiobutton(root,variable=rating,value=2,text="Moderate")
 r_bad=Radiobutton(root,variable=rating,value=1,text="Bad")
+
+#is_pitched radio
+pitched=IntVar()
+pitch_label=Label(root,text="Is Pitched ?")
+yes_pitched=Radiobutton(root,variable=pitched,value=1,text="Yes")
+no_pitched=Radiobutton(root,variable=pitched,value=0,text="No")
+
+
 
 #display
 
@@ -105,9 +114,12 @@ rating_label.grid(row=3,column=1,pady=10)
 r_excellent.grid(row=3,column=2)
 r_moderate.grid(row=3,column=3,padx=50)
 r_bad.grid(row=3,column=5)
-forward_button.grid(row=4,column=5,pady=20)
-back_button.grid(row=4,column=0,pady=20)
-save.grid(row=4,column=2,pady=20)
+pitch_label.grid(row=4,column=1,pady=10)
+yes_pitched.grid(row=4,column=2)
+no_pitched.grid(row=4,column=3)
+forward_button.grid(row=5,column=5,pady=20)
+exit_button.grid(row=5,column=0,pady=20)
+save.grid(row=5,column=2,pady=20)
 
 
 root.mainloop()
