@@ -14,7 +14,8 @@ save_image_directory="D:/project/"
 save_image_directory=save_image_directory+"training_images"
 
 os.mkdir(save_image_directory)
-data={}
+data_list=list()
+
 def onclicked_saved():
     if (number==len(image_list)-1):
         save['state']=DISABLED
@@ -23,23 +24,26 @@ def onclicked_saved():
     is_pitched=pitched.get()
     has_cracks=cracks.get()
 
-    global data
+    global data_list
+    
     picname=image_list[number].split(".")
     
     img=Image.open(image_directory+'/'+image_list[number])
     img_mirrored=ImageOps.mirror(img)
-    crop_box=(0,img.height/2,img.width,img.height)
+    crop_box=(0,img.height/4,img.width,img.height)
     img_cropped=img.crop(box=crop_box)
 
     #dict
     for i in range (3):
-
+        data={}
         new_name=picname[0]+str(i)+"."+picname[-1]
-        data[new_name]={}
-        data[new_name]['has_potholes']=has_potholes
-        data[new_name]['rating']=user_rating
-        data[new_name]['is_pitched']=is_pitched
-        data[new_name]['has_cracks']=has_cracks
+        #data[new_name]={}
+        data['image_name']=new_name
+        data['has_potholes']=has_potholes
+        data['rating']=user_rating
+        data['is_pitched']=is_pitched
+        data['has_cracks']=has_cracks
+        data_list.append(data)
 
         if (i==0):
             img.save(save_image_directory+"/"+new_name)
@@ -163,9 +167,9 @@ save.grid(row=6,column=2,pady=20)
 root.mainloop()
 
 #dict to json here we go
-json_file = json.dumps(data,indent=6)  
+json_file = json.dumps(data_list,indent=6)  
     
 with open("images.json","w") as outfile:
     outfile.write(json_file)
 
-#bigyadhungana@gmail.com
+#bigyadhungana@gmail.com      
