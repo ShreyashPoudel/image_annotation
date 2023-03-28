@@ -2,12 +2,18 @@ import os
 import json
 from os import listdir
 from tkinter import *
-from PIL import Image,ImageTk
+from PIL import Image,ImageTk,ImageOps
 
 
 #***************************enter the path to image***********************************#
-image_directory="D:/project/pic"
+image_directory='D:/project/pic'
 #*************************************************************************************#
+save_image_directory="D:/project/"
+#*************************************************************************#
+
+save_image_directory=save_image_directory+"training_images"
+
+os.mkdir(save_image_directory)
 data={}
 def onclicked_saved():
     if (number==len(image_list)-1):
@@ -15,20 +21,42 @@ def onclicked_saved():
     has_potholes=pot.get()
     user_rating=rating.get()
     is_pitched=pitched.get()
+    has_cracks=cracks.get()
+
+    global data
+    picname=image_list[number].split(".")
+    
+    img=Image.open(image_directory+'/'+image_list[number])
+    img_mirrored=ImageOps.mirror(img)
+    crop_box=(0,img.height/2,img.width,img.height)
+    img_cropped=img.crop(box=crop_box)
 
     #dict
-    global data
-    data[image_list[number]]={}
-    data[image_list[number]]['has_potholes']=has_potholes
-    data[image_list[number]]['rating']=user_rating
-    data[image_list[number]]['is_pitched']=is_pitched
+    for i in range (3):
+
+        new_name=picname[0]+str(i)+"."+picname[-1]
+        data[new_name]={}
+        data[new_name]['has_potholes']=has_potholes
+        data[new_name]['rating']=user_rating
+        data[new_name]['is_pitched']=is_pitched
+        data[new_name]['has_cracks']=has_cracks
+
+        if (i==0):
+            img.save(save_image_directory+"/"+new_name)
+        if (i==1):
+            img_mirrored.save(save_image_directory+"/"+new_name)
+        if (i==2):
+            img_cropped.save(save_image_directory+"/"+new_name)
+
+
 
     #if end reached
     if (number<len(image_list)-1):
         onclicked_forward()
     else :
         print("sakyoo")
-        
+    
+
 
 
 
@@ -48,7 +76,7 @@ def display_image(position):
     
     #load image
     global data_image
-    data_image_full=Image.open('D:/project/pic/'+image_list[position])
+    data_image_full=Image.open(image_directory+'/'+image_list[position])
     data_image_reduced=data_image_full.resize((250,200))
     data_image=ImageTk.PhotoImage(data_image_reduced)
 
@@ -105,6 +133,11 @@ pitch_label=Label(root,text="Is Pitched ?")
 yes_pitched=Radiobutton(root,variable=pitched,value=1,text="Yes")
 no_pitched=Radiobutton(root,variable=pitched,value=0,text="No")
 
+#has cracks radio
+cracks=IntVar()
+cracks_label=Label(root,text="Has Cracks?")
+yes_cracks=Radiobutton(root,variable=cracks,value=1,text="Yes")
+no_cracks=Radiobutton(root,variable=cracks,value=0,text="No")
 
 
 #display
@@ -119,9 +152,12 @@ r_bad.grid(row=3,column=5)
 pitch_label.grid(row=4,column=1,pady=10)
 yes_pitched.grid(row=4,column=2)
 no_pitched.grid(row=4,column=3)
-forward_button.grid(row=5,column=5,pady=20)
-exit_button.grid(row=5,column=0,pady=20)
-save.grid(row=5,column=2,pady=20)
+cracks_label.grid(row=5,column=1,pady=10)
+yes_cracks.grid(row=5,column=2)
+no_cracks.grid(row=5,column=3)
+forward_button.grid(row=6,column=5,pady=20)
+exit_button.grid(row=6,column=0,pady=20)
+save.grid(row=6,column=2,pady=20)
 
 
 root.mainloop()
